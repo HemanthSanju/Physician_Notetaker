@@ -1,11 +1,8 @@
-# nlp_pipeline.py
 import spacy
 from transformers import pipeline
 
-# Load spaCy model (you can substitute a medical-specific model if available)
 nlp = spacy.load("en_core_web_sm")
 
-# Load a sentiment analysis pipeline from Hugging Face
 sentiment_analyzer = pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english")
 
 def extract_medical_details(transcript: str) -> dict:
@@ -24,25 +21,18 @@ def extract_medical_details(transcript: str) -> dict:
     current_status = ""
     prognosis = ""
 
-    # Extracting symptoms based on simple keyword matching
     if "neck" in transcript.lower():
         symptoms.append("Neck pain")
     if "back" in transcript.lower():
         symptoms.append("Back pain")
     if "head" in transcript.lower():
         symptoms.append("Head impact")
-
-    # Diagnosis detection
     if "whiplash" in transcript.lower():
         diagnosis = "Whiplash injury"
-
-    # Treatment detection
     if "physiotherapy" in transcript.lower():
         treatment.append("Physiotherapy sessions")
     if "painkillers" in transcript.lower():
         treatment.append("Painkillers")
-
-    # Status and prognosis
     if "occasional" in transcript.lower():
         current_status = "Occasional pain"
     if "full recovery" in transcript.lower():
@@ -69,8 +59,7 @@ def perform_sentiment_intent_analysis(patient_text: str) -> dict:
         sentiment = "Anxious"
     elif sentiment_result["label"] == "POSITIVE":
         sentiment = "Reassured"
-
-    # Simple rules for intent detection
+    
     intent = "General conversation"
     if "worried" in patient_text.lower() or "concern" in patient_text.lower():
         intent = "Seeking reassurance"
